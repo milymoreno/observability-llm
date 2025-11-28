@@ -1,0 +1,6 @@
+2025-11-28 13:44:21 ERROR service-auth timeout connecting to database
+2025-11-28 13:44:22 WARN  service-api retrying request (1/3)
+2025-11-28 13:44:23 ERROR service-auth connection reset by peer
+2025-11-28 13:44:24 ERROR service-auth failed to authenticate token
+2025-11-28 13:44:25 CRITICAL service-db pool exhausted max=50 current=50
+2025-11-28 13:44:26 ERROR service-db query exceeded timeout threshold (5000ms)
