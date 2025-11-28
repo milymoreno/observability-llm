@@ -19,10 +19,30 @@ para transformar logs, métricas y trazas en:
 - **Cluster Kubernetes local**: Kind
 - **Observabilidad**: Prometheus, Loki, Grafana
 - **IA generativa**:
+
   - LLM local con Ollama (Mistral / Llama3)
   - o por API (OpenAI, Anthropic, Mistral, etc.)
 - **Agente del workshop**:
+
   - Script Python que conecta logs/métricas con un LLM
+
+
+## 📂 Estructura del repo original
+
+```bash
+workshop-observability-llm/
+  ├── README.md                # Descripción general del workshop
+  ├── plan_trabajo.md          # Plan detallado de preparación
+  ├── setup/
+  │     ├── cluster-kind.yaml  # Configuración del cluster Kind
+  │     ├── install-observability.sh  # Script para instalar el stack de observabilidad
+  ├── agent/
+  │     ├── insight_agent.py   # Agente que conecta observabilidad con el LLM
+  │     └── prompts/           # Prompts reutilizables
+  ├── datasets/                # Logs y métricas simuladas
+  └── dashboards/              # Dashboards de Grafana en formato JSON
+```
+
 
 ## 📂 Estructura del repo
 
