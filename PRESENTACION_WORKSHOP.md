@@ -21,9 +21,9 @@ Yo uso **IA generativa, automatización y arquitectura cloud** para transformar 
 
 ---
 
-## �📌 Objetivo del Workshop
+##  Objetivo del Workshop
 
-### **Aprender a usar LLMs como "SRE virtuales"**
+### **Aprender a usar LLMs como "SRE virtuales" en Kubernetes**
 
 Al final de este workshop, serás capaz de:
 
@@ -31,13 +31,22 @@ Al final de este workshop, serás capaz de:
 ✅ **Identificar causas raíz** de incidentes en segundos  
 ✅ **Generar recomendaciones** de solución sin reglas predefinidas  
 ✅ **Reducir MTTR** (Mean Time To Resolution) dramáticamente  
+✅ **Integrar LLMs con el stack de observabilidad en K8s**  
 
-### **Sin necesidad de:**
-❌ Instalar Kubernetes  
-❌ Configurar Grafana/Prometheus  
-❌ Infraestructura compleja  
+### **¿Por qué Kubernetes?**
 
-**Solo necesitas:** Python + API Key gratis de Groq
+🎯 **Escenarios reales de producción:**
+- Observabilidad cloud-native completa (Grafana + Loki + Prometheus)
+- Monitoreo de múltiples microservicios
+- Logs centralizados desde pods
+- Métricas y alertas en tiempo real
+- **Integración LLM → Grafana → Kubernetes**
+
+🚀 **Lo que veremos:**
+- Stack completo: Loki (logs) + Prometheus (métricas) + Grafana (visualización)
+- Agente LLM que analiza logs reales de Kubernetes
+- Conexión entre observabilidad tradicional e IA Generativa
+- Cómo aplicarlo en tus clusters de producción
 
 ---
 
@@ -45,15 +54,47 @@ Al final de este workshop, serás capaz de:
 
 ```
 ┌─────────────────────────────────────────┐
-│  15 min  │  Introducción + Demo         │
+│  15 min  │  Introducción + Demo K8s     │
 ├─────────────────────────────────────────┤
 │  30 min  │  Demo en Vivo Completa       │
+│          │  (Grafana + Loki + LLM)      │
 ├─────────────────────────────────────────┤
 │  35 min  │  Hands-On (¡Tú lo ejecutas!) │
 ├─────────────────────────────────────────┤
 │  10 min  │  Q&A + Próximos Pasos        │
 └─────────────────────────────────────────┘
 ```
+
+---
+
+## 🚀 Setup del Stack de Observabilidad
+
+### **Stack Kubernetes completo:**
+
+```bash
+# 1. Cluster Minikube corriendo
+minikube status
+
+# 2. Stack de observabilidad instalado
+kubectl get pods -n observability
+
+# Deberías ver:
+# - loki-0 (logs)
+# - loki-prometheus-server (métricas)
+# - loki-grafana (visualización)
+# - loki-promtail (recolector de logs)
+```
+
+### **Acceso a Grafana:**
+
+```bash
+# Usuario: admin
+# Password: qRz3B5jeSNksiFQ7rXClMgrie7Vyk1Dv34nsMhA8
+
+# Acceso: http://localhost:3000
+```
+
+**Port-forward ya configurado** ✅
 
 ---
 
