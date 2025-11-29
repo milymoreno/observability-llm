@@ -125,7 +125,7 @@ Contiene logs reales del escenario 1 para pruebas.
 
 ```bash
 # 1. Configurar API key
-export GROQ_API_KEY="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"
+export GROQ_API_KEY="TU_API_KEY_AQUI"
 
 # 2. Abrir archivos clave
 code PRESENTACION_WORKSHOP.md  # Guía paso a paso
@@ -167,7 +167,7 @@ code dashboard.html            # Dashboard visual
 
 ```bash
 # Guárdala en tu .bashrc para que sea permanente
-echo 'export GROQ_API_KEY="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"' >> ~/.bashrc
+echo 'export GROQ_API_KEY="TU_API_KEY_AQUI"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -197,7 +197,7 @@ source ~/.bashrc
 
 ```bash
 # Setup inicial
-export GROQ_API_KEY="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"
+export GROQ_API_KEY="TU_API_KEY_AQUI"
 
 # Prueba rápida (todo automatizado)
 bash test_agente.sh

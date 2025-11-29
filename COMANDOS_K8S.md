@@ -79,7 +79,7 @@ cat > logs_incidente.txt << 'EOF'
 EOF
 
 # 3. Analizar con LLM
-export GROQ_API_KEY="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"
+export GROQ_API_KEY="TU_API_KEY_AQUI"
 python3 agent/insight_agent.py logs_incidente.txt
 
 # 4. Ver análisis detallado con 9 secciones
