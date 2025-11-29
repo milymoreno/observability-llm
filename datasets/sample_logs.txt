@@ -1,0 +1,14 @@
+
+🎭 Generador de Logs Simulados - Workshop Observability
+======================================================================
+
+Escenarios disponibles:
+  1. Database Connection
+  2. Memory Leak
+  3. High Latency
+  4. Disk Full
+  5. Todos los escenarios
+  0. Salir
+======================================================================
+
+Selecciona un escenario (0-5): 

@@ -3,7 +3,25 @@
 
 ---
 
-## 📌 Objetivo del Workshop
+## �‍💻 Presentación
+
+### Mildred Moreno
+
+**Los equipos de DevOps viven ahogados en logs y alertas.**
+
+Yo uso **IA generativa, automatización y arquitectura cloud** para transformar ese caos en claridad: causas raíz, análisis y acciones inmediatas.
+
+**¿Quién soy?**
+- 🎓 Ingeniera y Magíster en Ciencias de la Computación
+- ☁️ AWS Solutions Architect Certified
+- 🤖 Futura Doctora en IA
+- 💼 Especialista en DevOps, Cloud y Observabilidad
+
+**Hoy veremos cómo la IA puede revolucionar DevOps y la observabilidad.**
+
+---
+
+## �📌 Objetivo del Workshop
 
 ### **Aprender a usar LLMs como "SRE virtuales"**
 
@@ -72,7 +90,85 @@ Los **3 pilares:**
 
 ---
 
-## 🚀 PARTE 2: Demo en Vivo (30 min)
+## � ¿Qué son los "Insights"?
+
+### Definición
+
+Un **insight** es una **comprensión profunda y accionable** extraída de datos complejos.
+
+**En observabilidad tradicional:**
+```
+📊 Logs crudos → 🧑 Humano lee → 🤔 Humano analiza → 💭 Humano concluye
+(5-30 minutos por incidente)
+```
+
+**Con LLM generando insights:**
+```
+📊 Logs crudos → 🤖 LLM analiza → 💡 Insight automático
+(5-10 segundos)
+```
+
+### Características de un Buen Insight
+
+1. **Accionable** ✅
+   - No solo describe el problema
+   - Sugiere **qué hacer** para solucionarlo
+
+2. **Contextualizado** 📋
+   - Explica **por qué** está pasando
+   - Relaciona múltiples síntomas
+
+3. **Priorizado** 🎯
+   - Indica **severidad** (¿qué tan urgente?)
+   - Ordena acciones por **impacto**
+
+4. **Comprensible** 💬
+   - En lenguaje natural (no código)
+   - Para cualquier nivel técnico
+
+### Ejemplo: Log vs Insight
+
+**Log crudo:**
+```
+2025-11-29 10:15:32 ERROR [auth-service] Connection pool exhausted
+2025-11-29 10:15:33 ERROR [auth-service] Database timeout 30s
+2025-11-29 10:15:35 WARN  [api-gateway] Upstream not responding
+2025-11-29 10:15:45 ERROR [auth-service] Too many connections
+```
+
+**Insight generado por LLM:**
+```
+🔴 CRÍTICO: Pool de conexiones a la base de datos agotado
+
+CAUSA RAÍZ:
+- Las conexiones no se liberan después de usarse (leak)
+- Límite de 50 conexiones alcanzado constantemente
+- Transacciones abiertas sin cerrar
+
+IMPACTO:
+- Servicio auth-service completamente no disponible
+- 95% de errores en últimos 5 minutos
+- Afecta a todos los usuarios (autenticación caída)
+
+ACCIONES INMEDIATAS:
+1. Reiniciar pool de conexiones del auth-service (2 min)
+2. Aumentar límite temporal: 50 → 100 conexiones (5 min)
+3. Revisar código que abre conexiones DB (30 min)
+4. Implementar timeout más agresivo para liberar (15 min)
+
+PREVENCIÓN:
+- Monitorear conexiones abiertas por tiempo
+- Alertar cuando pool > 80% ocupado
+- Code review: verificar try-finally en DB access
+```
+
+**Diferencia:**
+- ❌ Log: "Algo está roto con las conexiones"
+- ✅ Insight: "Por qué está roto + Cómo arreglarlo + Cómo evitarlo"
+
+---
+
+## �🚀 PARTE 2: Demo en Vivo (30 min)
 
 ### Demo Rápida (2 minutos)
 
@@ -405,6 +501,145 @@ start dashboard.html
 
 **Nota:** Este dashboard es HTML estático para demostración.
 En producción, conectarías Grafana real con Loki/Prometheus.
+
+---
+
+### 📊 ¿Es posible ver logs en Grafana?
+
+**SÍ, absolutamente.** De hecho, es el camino recomendado para producción.
+
+#### Stack Completo de Observabilidad
+
+```
+┌────────────────────────────────────────────────────┐
+│  APLICACIONES / SERVICIOS                          │
+│  (Generan logs, métricas, trazas)                  │
+└──────────────────┬─────────────────────────────────┘
+                   │
+    ┌──────────────┼──────────────┐
+    ▼              ▼              ▼
+┌─────────┐  ┌──────────┐  ┌───────────┐
+│  LOKI   │  │PROMETHEUS│  │  TEMPO    │
+│ (Logs)  │  │(Métricas)│  │ (Trazas)  │
+└─────────┘  └──────────┘  └───────────┘
+    │              │              │
+    └──────────────┼──────────────┘
+                   ▼
+            ┌─────────────┐
+            │   GRAFANA   │
+            │(Visualiza)  │
+            └──────┬──────┘
+                   │
+                   ▼
+         ┌────────────────────┐
+         │   AGENTE LLM       │
+         │ (Analiza + Insight)│
+         └────────────────────┘
+```
+
+#### Integración con Grafana
+
+**1. Loki como fuente de logs**
+```yaml
+# grafana/datasources.yaml
+apiVersion: 1
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: true
+```
+
+**2. Query de logs en Grafana**
+```logql
+# LogQL (lenguaje de query de Loki)
+{service="auth-service"} |= "ERROR" | json
+```
+
+**3. Trigger del agente LLM**
+
+Cuando Grafana detecta anomalías:
+```
+Grafana Alerta → Webhook → Agente LLM → Análisis → Slack/PagerDuty
+```
+
+#### Flujo Completo en Producción
+
+```
+1. RECOLECCIÓN
+   App → Promtail → Loki (almacena logs)
+
+2. VISUALIZACIÓN
+   Loki → Grafana (dashboards + alertas)
+
+3. DETECCIÓN
+   Grafana detecta patrón anómalo → Dispara alerta
+
+4. ANÁLISIS IA
+   Webhook llama al agente LLM con logs relevantes
+
+5. INSIGHT
+   LLM genera análisis + recomendaciones
+
+6. NOTIFICACIÓN
+   Resultado → Slack/Teams/PagerDuty con contexto completo
+
+7. ACCIÓN
+   SRE tiene causa raíz + pasos a seguir inmediatamente
+```
+
+#### ¿Por qué NO usamos Grafana en este workshop?
+
+**Razones prácticas:**
+
+1. **Instalación compleja** 
+   - Requiere Kubernetes o Docker Compose
+   - Loki + Prometheus + Grafana = 30-45 min setup
+   - Participantes pueden tener problemas de permisos/red
+
+2. **Espacio en disco**
+   - Stack completo necesita 2-3 GB mínimo
+   - No todos tienen espacio disponible
+
+3. **Enfoque del workshop**
+   - Queremos mostrar el **concepto** del agente LLM
+   - La UI de Grafana es secundaria
+   - Mejor usar tiempo en modificar prompts y entender IA
+
+**Para producción:**
+- ✅ Usa Grafana + Loki (mejor práctica)
+- ✅ Configura alertas con webhooks
+- ✅ Integra el agente LLM en tu pipeline
+
+**Para este workshop:**
+- ✅ Dashboard HTML muestra el concepto
+- ✅ Nos enfocamos en el agente LLM
+- ✅ Después pueden integrar con su Grafana existente
+
+#### Demo Opcional: Grafana Cloud (GRATIS)
+
+Si quieres ver Grafana real durante el workshop:
+
+1. **Ve a:** https://grafana.com/auth/sign-up
+2. **Crea cuenta** gratuita (14 días trial completo)
+3. **Accede** a tu instancia cloud
+4. **Crea dashboard** con logs de ejemplo
+
+**Ventajas:**
+- ✅ Listo en 5 minutos
+- ✅ Sin instalación local
+- ✅ Accesible desde cualquier lado
+- ✅ UI profesional
+
+**Para conectar el agente:**
+```python
+# En tu código
+def send_to_grafana_cloud(analysis, api_key):
+    # Enviar insight como anotación
+    # O crear alert personalizada
+    pass
+```
 
 ---
 

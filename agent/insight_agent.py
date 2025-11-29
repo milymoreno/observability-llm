@@ -3,33 +3,55 @@ import json
 import os
 
 def analyze_logs_groq(logs, api_key):
-    """Analiza logs usando Groq API (gratis y rápido)"""
-    prompt = f"""
-Eres un ingeniero SRE senior.
+    """
+    Analiza logs usando Groq API (llama-3.1-8b-instant)
+    Genera insights estructurados y accionables
+    """
+    
+    prompt = f"""Eres un SRE experto con 15 años de experiencia analizando incidentes de producción.
 
-Tarea:
-Analiza los siguientes logs y responde de forma breve, clara y estructurada en ESPAÑOL.
+Analiza los siguientes logs y genera un análisis COMPLETO y ACCIONABLE en ESPAÑOL.
 
-Responde SIEMPRE en este formato Markdown:
+FORMATO DE RESPUESTA (usa emojis para mejor legibilidad):
 
-### 1. Resumen del incidente
-- Descripción breve (1–2 líneas)
+### 📋 RESUMEN EJECUTIVO
+(2-3 líneas explicando qué está pasando)
 
-### 2. Causa probable
-- Hipótesis principal
-- Otros factores posibles (si aplica)
+### 🔍 ANÁLISIS TÉCNICO
+- **Síntomas observados:**
+  - Síntoma 1
+  - Síntoma 2
+- **Componentes afectados:** [lista]
+- **Patrón del error:** [descripción]
 
-### 3. Severidad
-- Nivel: bajo / medio / alto / crítico
-- Justificación en una línea
+### 🎯 CAUSA RAÍZ PROBABLE
+(Explica la causa más probable con evidencia de los logs)
 
-### 4. Acciones recomendadas (máx. 4 bullets)
-- Acción 1
-- Acción 2
-- Acción 3
-- Acción 4 (opcional)
+### 🔴 SEVERIDAD
+**Nivel:** BAJA / MEDIA / ALTA / CRÍTICA  
+**Justificación:** (1-2 líneas)
 
-Logs a analizar:
+### ⚡ ACCIONES INMEDIATAS (próximos 15 min)
+1. **Acción 1:** [Descripción] (Tiempo: X min)
+2. **Acción 2:** [Descripción] (Tiempo: X min)
+3. **Acción 3:** [Descripción] (Tiempo: X min)
+
+### 🛠️ SOLUCIÓN PERMANENTE
+1. [Paso 1]
+2. [Paso 2]
+3. [Paso 3]
+
+### 📊 IMPACTO
+- **Usuarios afectados:** [estimación]
+- **Funcionalidad:** [qué no funciona]
+- **SLA:** [status]
+
+### 🔮 PREVENCIÓN
+- Alertas a configurar
+- Métricas a monitorear
+- Mejoras sugeridas
+
+LOGS A ANALIZAR:
 {logs}
 """
     
@@ -39,23 +61,50 @@ Logs a analizar:
     }
     
     payload = {
-        "model": "llama-3.1-8b-instant",  # Modelo gratuito de Groq
+        "model": "llama-3.1-8b-instant",
         "messages": [
-            {"role": "system", "content": "Eres un ingeniero SRE experto en análisis de incidentes."},
+            {"role": "system", "content": "Eres un SRE senior experto en análisis de incidentes y observabilidad cloud-native."},
             {"role": "user", "content": prompt}
         ],
-        "temperature": 0.3,
-        "max_tokens": 1024
+        "temperature": 0.3,  # Más determinístico
+        "max_tokens": 2048   # Más tokens para análisis completo
     }
     
-    response = requests.post("https://api.groq.com/openai/v1/chat/completions", 
-                            headers=headers, 
-                            json=payload)
-    
-    if response.status_code == 200:
-        return response.json()["choices"][0]["message"]["content"]
-    else:
-        return f"Error: {response.status_code} - {response.text}"
+    try:
+        print("🤖 Analizando logs con LLM (llama-3.1-8b-instant)...")
+        print("⏳ Esto puede tomar 5-15 segundos...\n")
+        
+        response = requests.post("https://api.groq.com/openai/v1/chat/completions", 
+                                headers=headers, 
+                                json=payload,
+                                timeout=30)
+        
+        if response.status_code == 200:
+            result = response.json()
+            analysis = result["choices"][0]["message"]["content"]
+            
+            # Formatear salida
+            print("=" * 80)
+            print("   🎯 ANÁLISIS DE INCIDENTE - INSIGHT GENERADO POR IA")
+            print("=" * 80)
+            print()
+            print(analysis)
+            print()
+            print("=" * 80)
+            tokens = result.get("usage", {}).get("total_tokens", "N/A")
+            print(f"✅ Análisis completado | Tokens usados: {tokens}")
+            print("=" * 80)
+            
+            return analysis
+        else:
+            error_msg = f"❌ ERROR {response.status_code}: {response.text}"
+            print(error_msg)
+            return error_msg
+            
+    except requests.exceptions.Timeout:
+        return "❌ ERROR: Timeout al conectar con Groq API (>30s)"
+    except Exception as e:
+        return f"❌ ERROR inesperado: {str(e)}"
 
 
 def analyze_logs_ollama(logs, llm_url="http://localhost:11434/api/generate"):
