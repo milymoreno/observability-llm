@@ -5,17 +5,17 @@
 
 ## �‍💻 Presentación
 
-### Mildred Moreno
+### Mildred (Mily )Moreno
 
 **Los equipos de DevOps viven ahogados en logs y alertas.**
 
 Yo uso **IA generativa, automatización y arquitectura cloud** para transformar ese caos en claridad: causas raíz, análisis y acciones inmediatas.
 
 **¿Quién soy?**
-- 🎓 Ingeniera y Magíster en Ciencias de la Computación
+- 🎓 Ingeniera en Informática con Magíster en Ciencias de la Computación
 - ☁️ AWS Solutions Architect Certified
 - 🤖 Futura Doctora en IA
-- 💼 Especialista en DevOps, Cloud y Observabilidad
+- 💼 Especialista en arquitectura de Soluciones Cloud, DevOps y Observabilidad
 
 **Hoy veremos cómo la IA puede revolucionar DevOps y la observabilidad.**
 
@@ -44,9 +44,12 @@ Al final de este workshop, serás capaz de:
 
 🚀 **Lo que veremos:**
 - Stack completo: Loki (logs) + Prometheus (métricas) + Grafana (visualización)
-- Agente LLM que analiza logs reales de Kubernetes
+- Agente LLM (Groq API - llama-3.1-8b-instant) que analiza logs
+- Dos enfoques: logs simulados (rápido) y logs de K8s (producción)
 - Conexión entre observabilidad tradicional e IA Generativa
 - Cómo aplicarlo en tus clusters de producción
+
+**LLM utilizado:** Groq API (gratuito, sin instalación local)
 
 ---
 
