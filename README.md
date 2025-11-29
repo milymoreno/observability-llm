@@ -1,56 +1,85 @@
-# IA Generativa para DevOps: Observabilidad Cloud-Native + LLMs
+# 🚀 Workshop: Observability + LLM
 
-Este repositorio contiene el material del workshop:
+> **IA Generativa para DevOps: Análisis Inteligente de Logs con LLMs**
 
-**"IA generativa para DevOps: automatizando insights y alertas con LLMs y observabilidad Cloud-Native"**
+Un agente LLM que actúa como SRE virtual, analizando logs de observabilidad y generando insights automáticos.
 
-## 🎯 Objetivo
+## ✨ Características
 
-Mostrar, de forma práctica, cómo conectar un stack de observabilidad Cloud-Native(Prometheus, Loki, Grafana, Tempo opcional) con un modelo de lenguaje (LLM)
-para transformar logs, métricas y trazas en:
+- 🤖 Análisis automático de logs con LLM (Groq API)
+- 🎭 Generador de incidentes simulados (4 escenarios)
+- 📊 Dashboard HTML interactivo
+- 🌐 **Multiplataforma: Windows, Linux, macOS**
+- ⚡ Sin dependencias de Kubernetes/Grafana
 
-- Explicaciones automáticas de incidentes
-- Alertas enriquecidas en lenguaje natural
-- Recomendaciones de mitigación
-- Resúmenes de impacto para equipos DevOps, SRE y Cloud
+## 🚀 Quick Start (2 minutos)
 
-## 🧱 Componentes principales
+### 1. Configurar API Key
 
-- **Cluster Kubernetes local**: Kind
-- **Observabilidad**: Prometheus, Loki, Grafana
-- **IA generativa**:
-
-  - LLM local con Ollama (Mistral / Llama3)
-  - o por API (OpenAI, Anthropic, Mistral, etc.)
-- **Agente del workshop**:
-
-  - Script Python que conecta logs/métricas con un LLM
-
-
-## 📂 Estructura del repo original
-
+**Linux/macOS:**
 ```bash
-workshop-observability-llm/
-  ├── README.md                # Descripción general del workshop
-  ├── plan_trabajo.md          # Plan detallado de preparación
-  ├── setup/
-  │     ├── cluster-kind.yaml  # Configuración del cluster Kind
-  │     ├── install-observability.sh  # Script para instalar el stack de observabilidad
-  ├── agent/
-  │     ├── insight_agent.py   # Agente que conecta observabilidad con el LLM
-  │     └── prompts/           # Prompts reutilizables
-  ├── datasets/                # Logs y métricas simuladas
-  └── dashboards/              # Dashboards de Grafana en formato JSON
+export GROQ_API_KEY="tu_key_aqui"
 ```
 
+**Windows (PowerShell):**
+```powershell
+$env:GROQ_API_KEY="tu_key_aqui"
+```
 
-## 📂 Estructura del repo
+### 2. Instalar Dependencias
 
 ```bash
-workshop-observability-llm/
-  ├── README.md
-  ├── setup/
-  ├── agent/
-  ├── datasets/
-  └── dashboards/
+pip install requests
 ```
+
+### 3. Ejecutar Demo
+
+**Linux/macOS:**
+```bash
+bash demo_completo.sh
+```
+
+**Windows:**
+```powershell
+python datasets/generate_logs.py
+# Selecciona escenario 1, espera 10 segundos, presiona Ctrl+C
+python agent/insight_agent.py datasets/sample_logs.txt
+```
+
+## 📁 Estructura
+
+```
+.
+├── agent/                    # Agente LLM
+│   └── insight_agent.py     # Análisis automático de logs
+├── datasets/                 # Generadores de logs
+│   └── generate_logs.py     # 4 escenarios de incidentes
+├── dashboard.html           # Dashboard de visualización
+└── demo_completo.sh         # Demo automatizada
+```
+
+## 🎯 Escenarios Disponibles
+
+1. **Database Connection Failure** - Pool de conexiones agotado ⭐
+2. **Memory Leak** - Consumo progresivo de memoria
+3. **High Latency** - Degradación de rendimiento
+4. **Disk Full** - Espacio en disco insuficiente
+
+## 📦 Requisitos
+
+- Python 3.7+
+- API Key de Groq (gratis en https://console.groq.com/keys)
+- 10 MB de espacio
+
+**NO requiere**: Kubernetes, Grafana, Prometheus, Docker
+
+## 💡 ¿Qué hace el agente?
+
+Analiza logs y genera:
+1. Resumen del incidente
+2. Causa raíz
+3. Nivel de severidad
+4. Acciones recomendadas
+5. Información adicional
+
+Todo en segundos, sin reglas predefinidas.

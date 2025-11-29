@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Observability - Workshop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+        }
+        
+        .metric-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .metric-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .status-ok { color: #00ff00; }
+        .status-warning { color: #ffa500; }
+        .status-critical { color: #ff0000; }
+        
+        .logs-container {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .logs-container h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .log-entry {
+            font-family: 'Courier New', monospace;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-left: 3px solid #333;
+            background: #0a0a0a;
+            font-size: 0.9em;
+        }
+        
+        .log-error { border-left-color: #ff0000; }
+        .log-warn { border-left-color: #ffa500; }
+        .log-info { border-left-color: #00ff00; }
+        
+        .analysis-box {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border: 1px solid #667eea;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .analysis-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .insight-section {
+            margin-bottom: 20px;
+        }
+        
+        .insight-section h3 {
+            color: #ffa500;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .insight-section ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .insight-section li {
+            padding: 5px 0;
+            position: relative;
+        }
+        
+        .insight-section li:before {
+            content: "→";
+            position: absolute;
+            left: -20px;
+            color: #667eea;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #764ba2;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Dashboard Observability + LLM</h1>
+        <p>Workshop: IA Generativa para DevOps</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="metric-card">
+            <h3><span class="live-indicator"></span>Estado del Sistema</h3>
+            <div class="metric-value status-critical">CRÍTICO</div>
+            <div class="metric-label">3 servicios afectados</div>
+        </div>
+
+        <div class="metric-card">
+            <h3>Tasa de Errores</h3>
+            <div class="metric-value status-critical">95%</div>
+            <div class="metric-label">Últimos 5 minutos</div>
+        </div>
+
+        <div class="metric-card">
+            <h3>Latencia P95</h3>
+            <div class="metric-value status-warning">8000ms</div>
+            <div class="metric-label">SLA: 2000ms</div>
+        </div>
+
+        <div class="metric-card">
+            <h3>Conexiones Activas</h3>
+            <div class="metric-value status-critical">50/50</div>
+            <div class="metric-label">Pool agotado</div>
+        </div>
+    </div>
+
+    <div class="logs-container">
+        <h2>📝 Logs en Tiempo Real</h2>
+        <div class="log-entry log-error">2024-11-29 10:15:32 ERROR [auth-service] Connection pool exhausted: max connections 50 reached</div>
+        <div class="log-entry log-error">2024-11-29 10:15:33 ERROR [auth-service] Database connection timeout after 30s</div>
+        <div class="log-entry log-warn">2024-11-29 10:15:35 WARN  [api-gateway] Upstream service not responding: auth-service</div>
+        <div class="log-entry log-error">2024-11-29 10:15:40 ERROR [api-gateway] 502 Bad Gateway - failed to connect to auth-service</div>
+        <div class="log-entry log-error">2024-11-29 10:15:45 ERROR [auth-service] java.sql.SQLException: Too many connections</div>
+        <div class="log-entry log-error">2024-11-29 10:15:50 CRITICAL [monitoring] Service auth-service DOWN - failing health checks</div>
+    </div>
+
+    <div class="analysis-box">
+        <h2>🤖 Análisis Automático con LLM</h2>
+        
+        <div class="insight-section">
+            <h3>1. Resumen del Incidente</h3>
+            <ul>
+                <li>Pool de conexiones a la base de datos completamente agotado (50/50)</li>
+                <li>Servicio auth-service no disponible, afectando toda la autenticación</li>
+                <li>Múltiples timeouts y rechazos de conexión</li>
+            </ul>
+        </div>
+
+        <div class="insight-section">
+            <h3>2. Causa Probable</h3>
+            <ul>
+                <li><strong>Hipótesis principal:</strong> Conexiones a la BD no se están liberando correctamente</li>
+                <li>Posible leak de conexiones en auth-service</li>
+                <li>Transacciones abiertas sin cerrar (commit/rollback pendientes)</li>
+                <li>Timeout de conexión muy bajo (30s)</li>
+            </ul>
+        </div>
+
+        <div class="insight-section">
+            <h3>3. Severidad</h3>
+            <ul>
+                <li><strong>Nivel:</strong> <span style="color: #ff0000; font-weight: bold;">CRÍTICO</span></li>
+                <li>Servicio completamente no disponible para usuarios</li>
+                <li>95% de tasa de error en los últimos 5 minutos</li>
+                <li>Circuit breaker activado en api-gateway</li>
+            </ul>
+        </div>
+
+        <div class="insight-section">
+            <h3>4. Acciones Recomendadas</h3>
+            <ul>
+                <li><strong>Inmediato:</strong> Reiniciar el pool de conexiones del auth-service</li>
+                <li><strong>Corto plazo:</strong> Aumentar el límite de conexiones del pool (50 → 100)</li>
+                <li><strong>Mediano plazo:</strong> Revisar código que maneja conexiones DB en auth-service</li>
+                <li><strong>Preventivo:</strong> Implementar monitoreo de conexiones abiertas por tiempo</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="refreshData()">🔄 Actualizar Datos</button>
+        <button class="btn" onclick="generateNewIncident()">🎭 Simular Nuevo Incidente</button>
+        <button class="btn" onclick="window.location.reload()">🔃 Recargar Dashboard</button>
+    </div>
+
+    <script>
+        function refreshData() {
+            alert('🔄 En un dashboard real, esto consultaría Prometheus/Loki.\n\nEn el workshop completo:\n- Loki proporciona los logs\n- Prometheus las métricas\n- El agente LLM analiza en tiempo real');
+        }
+
+        function generateNewIncident() {
+            alert('🎭 Para generar incidentes reales:\n\n1. Ejecuta: python3 datasets/generate_logs.py\n2. Selecciona un escenario\n3. Los logs se generarán en tiempo real\n4. El agente LLM los analizará automáticamente');
+        }
+
+        // Simular actualización en tiempo real
+        setInterval(() => {
+            const indicator = document.querySelector('.live-indicator');
+            indicator.style.opacity = indicator.style.opacity === '0.5' ? '1' : '0.5';
+        }, 1000);
+    </script>
+</body>
+</html>
